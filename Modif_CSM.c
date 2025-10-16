@@ -8,6 +8,9 @@ int row, col, matrix[100][100], s[100];
 int TC[100] = {}, CS[100] = {}, supply[100][100], sumRow[100] = {};
 int status[100];
 
+int demand[100];
+int demand_index = 0;
+
 void minimumCell(FILE * inFile) {
   int i, j, minimum;
   for (j = 0; j < col; j++) {
@@ -18,7 +21,17 @@ void minimumCell(FILE * inFile) {
         if (TC[i] > TC[minimum]) minimum = i;
       }
     }
+    // ? This should be reading the demand value for each column
+    // ? but this logic is making no sense
+    // ? wtf does the array named supply do when the supply is read into the s array
     fscanf(inFile, "%d", & supply[minimum][j]);
+
+    // ! Trying out something FREAKY, don't know if it will work or not
+    demand[demand_index++] = supply[minimum][j];
+    // * EDIT : IT WORKED, CHAT WE DID IT
+
+    // The more I try to understand this code, the more it doesn't make sense
+    // TODO: understand the whole damn program to know what supply array do
   }
 
   for (i = 0; i < row; i++) {
@@ -281,16 +294,20 @@ void check() {
   };
 
   for (j = 0; j < col; j++) printf("\t");
-  printf("    supply\tTC\tTCS\tTOTAL ALLOC\tSTATUS\n");
+  printf("\t\t\tsupply\tTC\tTCS\tTOTAL ALLOC\tSTATUS\n");
   for (j = 0; j < col; j++) printf("\t");
-  printf("    ---------------------------------------------------------\n");
+  printf("\t\t\t---------------------------------------------------------\n");
   for (i = 0; i < row; i++) {
+    printf("Row ke %d\t", i + 1);
     for (j = 0; j < col; j++) {
       printf("%d [%d]\t", matrix[i][j], supply[i][j]);
     }
-    printf("||  %d\t\t%d\t%d\t%d\t\t%s\n\n", s[i], TC[i], CS[i], sumRow[i], stat[status[i] - 1]);
+    printf("||\t%d\t\t%d\t%d\t%d\t\t%s\n\n", s[i], TC[i], CS[i], sumRow[i], stat[status[i] - 1]);
   }
-
+  printf("Demand\t\t");
+  for (j = 0; j < col; j++) {
+    printf("%d\t", demand[j]);
+  }
   printf("\n\n\n");
 }
 
