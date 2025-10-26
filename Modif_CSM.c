@@ -230,15 +230,15 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
 void donate(int * donaturRow, int * receiverRow, int * donationCol) {
   // STEP 6.b.
   printf("STEP 6: Pindahkan unit demand dari FLC ke SLC\n");
-  printf("Baris FLC = baris %d kolom %d\n", *donaturRow + 1, *donationCol + 1);
-  printf("Baris SLC = baris %d kolom %d\n", *receiverRow + 1, *donationCol + 1);
+  printf("Letak FLC = baris %d kolom %d\n", *donaturRow + 1, *donationCol + 1);
+  printf("Letak SLC = baris %d kolom %d\n", *receiverRow + 1, *donationCol + 1);
   printf("\n");
   printf("FLC supply != SLC supply\n");
 
   int TA_Supply_FLC = abs(s[ * donaturRow] - sumRow[ * donaturRow]);
   int TA_Supply_SLC = abs(s[ * receiverRow] - sumRow[ * receiverRow]);
-  printf("| TA - Supply | FLC = %d\n", TA_Supply_FLC);
-  printf("| TA - Supply | SLC = %d\n", TA_Supply_SLC);
+  printf("|TA - Supply| FLC = %d\n", TA_Supply_FLC);
+  printf("|TA - Supply| SLC = %d\n", TA_Supply_SLC);
 
   int priority;
   if (TA_Supply_FLC > TA_Supply_SLC) { // STEP 6.a.i. satisfy SLC
@@ -294,7 +294,7 @@ void check() {
   };
 
   for (j = 0; j < col; j++) printf("\t");
-  printf("\t\t\tsupply\tTC\tTCS\tTOTAL ALLOC\tSTATUS\n");
+  printf("\t\t\tsupply\t\tTC\tTCS\tTOTAL ALLOC\tSTATUS\n");
   for (j = 0; j < col; j++) printf("\t");
   printf("\t\t\t---------------------------------------------------------\n");
   for (i = 0; i < row; i++) {
