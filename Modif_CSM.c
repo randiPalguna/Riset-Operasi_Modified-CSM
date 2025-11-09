@@ -21,17 +21,8 @@ void minimumCell(FILE * inFile) {
         if (TC[i] > TC[minimum]) minimum = i;
       }
     }
-    // ? This should be reading the demand value for each column
-    // ? but this logic is making no sense
-    // ? wtf does the array named supply do when the supply is read into the s array
     fscanf(inFile, "%d", & supply[minimum][j]);
-
-    // ! Trying out something FREAKY, don't know if it will work or not
     demand[demand_index++] = supply[minimum][j];
-    // * EDIT : IT WORKED, CHAT WE DID IT
-
-    // The more I try to understand this code, the more it doesn't make sense
-    // TODO: understand the whole damn program to know what supply array do
   }
 
   for (i = 0; i < row; i++) {
@@ -73,18 +64,18 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
   int temp = 0, smallestIndex = 0, localSmallest[col], localDon[col], localRec[col], flag = 0;
 
   printf("STEP 4: Hitung Diff di Setiap Kolom:\n");
-  //Cari local-best donation
+  // Cari local-best donation
   for (j = 0; j < col; j++) {
     localSmallest[j] = INT_MAX;
 
-    //mencari semua kandidat donasi
+    // Mencari semua kandidat donasi
     for (i = 0; i < row; i++) {
       if (status[i] == 3 && supply[i][j]) { //3 = Excess Row
         for (k = 0; k < nNeedSup; k++) {
           temp = matrix[i][j] - matrix[needSup[k]][j];
           if (temp < 0) temp *= -1;
           
-          //Find local smallest
+          // Find local smallest
           if (localSmallest[j] > temp) {
             localSmallest[j] = temp;
             localDon[j] = i;
@@ -99,7 +90,7 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
       }
     }
 
-    //mencari global smallest dan check flag
+    // Mencari global smallest dan check flag
     if (localSmallest[smallestIndex] > localSmallest[j] || smallestIndex == j) {
       smallestIndex = j;
       flag = 0;
@@ -131,15 +122,10 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
         donCapability1 = supply[localDon[smallestIndex]][smallestIndex];
         donCapability2 = supply[localDon[j]][j];
 
-        // printf("|| donCapability1 %d donCapability2 %d \n", donCapability1, donCapability2);
-        //	printf("|| maxdon1 %d maxdon2 %d hasil kali 1 : %d dan 2  %d\n",maxDon1,maxDon2,hasilKali1,hasilKali2);
-
         //cari kapasitas donasi keduanya
         ////cari prioritas satisfied 1
         CSDon = CS[localDon[smallestIndex]];
         CSRec = CS[localRec[smallestIndex]];
-
-        // printf("|| satisfied 1 : CSDon %d CSRec %d \n", CSDon, CSRec);
 
         if (CSDon > CSRec) //prioritas donatur satisfied
           priority1 = localDon[smallestIndex];
@@ -152,14 +138,11 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
 
         ////cari kapasitas prioritas satisfied 1
         maxDon1 = abs(s[priority1] - sumRow[priority1]);
-        //s[ priority1 ] - sumRow[ priority1 ];
         if (maxDon1 < 0) maxDon1 *= -1;
 
         ////cari prioritas satisfied 2
         CSDon = CS[localDon[j]];
         CSRec = CS[localRec[j]];
-
-        // printf("|| satisfied 2 : CSDon %d CSRec %d \n", CSDon, CSRec);
 
         if (CSDon > CSRec) //prioritas donatur satisfied
           priority2 = localDon[j];
@@ -174,37 +157,15 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
 
         maxDon2 = abs(s[priority2] - sumRow[priority2]);
         s[priority2] - sumRow[priority2];
-        //if(maxDon2 < 0) maxDon1 *= -1;
 
         //tentukan jumlah donasi
         if (donCapability1 < maxDon1) maxDon1 = donCapability1;
         if (donCapability2 < maxDon2) maxDon2 = donCapability2;
 
-        //bandingkan jumlah donasi
-        //				if(maxDon1 < maxDon2) {
-        //					*donaturRow = localDon[smallestIndex];
-        //					*receiverRow = localRec[smallestIndex];
-        //					*donationCol = smallestIndex;
-        //					
-        //				printf("|| maxDon1 < maxDon2 || maxdon 1 : %d maxdon 2 %d \n",maxDon1,maxDon2);
-        //					
-        //				} 
-        //				else if(maxDon1 > maxDon2){
-        //					*donaturRow = localDon[j];
-        //					*receiverRow = localRec[j];
-        //					*donationCol = j;
-        //					smallestIndex = j;
-        //				} 
-
-        //jika maxDon sama
-        //				else{
         //tentukan maxDon * cell
         int hasilKali1 = abs(maxDon1 * matrix[localRec[smallestIndex]][smallestIndex]);
         int hasilKali2 = abs(maxDon2 * matrix[localRec[j]][j]);
 
-        // printf("x1 %d \n", matrix[localRec[smallestIndex]][smallestIndex]);
-        // printf("x2 %d \n", matrix[localRec[j]][j]);
-        // printf("maxdon1 %d maxdon2 %d \n hasil kali 1 : %d dan 2  %d\n", maxDon1, maxDon2, hasilKali1, hasilKali2);
         printf("Kolom %d satisfy baris %d sehingga memiliki TU = %d dan TUC = %d\n", smallestIndex + 1, priority1 + 1, maxDon1, hasilKali1);
         printf("Kolom %d satisfy baris %d sehingga memiliki TU = %d dan TUC = %d\n", j + 1, priority2 + 1, maxDon2, hasilKali2);
         
@@ -219,8 +180,6 @@ void findDonatur(int * donaturRow, int * receiverRow, int * donationCol) {
           smallestIndex = j;
         }
         printf("Kolom smallest diff berada pada kolom %d\n\n", *donationCol + 1);
-        //kalo sama, ambil index terkecil
-        //				}
       }
     }
   }
@@ -312,8 +271,8 @@ void check() {
 }
 
 void compute() {
-  FILE * inFile = fopen(inputName, "r"); // read only 
-  FILE * outFile = fopen("output.txt", "w"); // write only
+  FILE * inFile = fopen(inputName, "r");
+  FILE * outFile = fopen("output.txt", "w");
   if (inFile == NULL) {
     printf("Error! Could not open file\n");
     return;
