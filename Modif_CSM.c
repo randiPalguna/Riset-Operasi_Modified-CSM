@@ -192,38 +192,43 @@ void donate(int * donaturRow, int * receiverRow, int * donationCol) {
   printf("Letak FLC = baris %d kolom %d\n", *donaturRow + 1, *donationCol + 1);
   printf("Letak SLC = baris %d kolom %d\n", *receiverRow + 1, *donationCol + 1);
   printf("\n");
-  printf("FLC supply != SLC supply\n");
+  if (s[* donaturRow] == s[* receiverRow]) {
+    printf("FLC supply == SLC supply\n");
+    priority = * donaturRow;
+    printf("   -> Satisfy baris FLC\n");    
+  } else {
+    printf("FLC supply != SLC supply\n");
 
-  int TA_Supply_FLC = abs(s[ * donaturRow] - sumRow[ * donaturRow]);
-  int TA_Supply_SLC = abs(s[ * receiverRow] - sumRow[ * receiverRow]);
-  printf("|TA - Supply| FLC = %d\n", TA_Supply_FLC);
-  printf("|TA - Supply| SLC = %d\n", TA_Supply_SLC);
+    int TA_Supply_FLC = abs(s[ * donaturRow] - sumRow[ * donaturRow]);
+    int TA_Supply_SLC = abs(s[ * receiverRow] - sumRow[ * receiverRow]);
+    printf("|TA - Supply| FLC = %d\n", TA_Supply_FLC);
+    printf("|TA - Supply| SLC = %d\n", TA_Supply_SLC);
 
-  int priority;
-  if (TA_Supply_FLC > TA_Supply_SLC) { // STEP 6.a.i. satisfy SLC
-    printf("-> |TA - supply|  FLC  >  |TA - supply| SLC\n");
-    priority = * receiverRow; 
-    printf("   -> Satisfy baris SLC\n");
-  } else { // STEP 6.a.ii. satisfy baris dengan TCS terbesar
-    printf("-> |TA - supply| FLC  <=  |TA - supply| SLC\n");
-    printf("   -> Satisfy baris dengan TCS terbesar\n");
-    int CSDon = CS[ * donaturRow];
-    int CSRec = CS[ * receiverRow];
-    if (CSDon > CSRec) { //prioritas donatur satisfied
-      priority = * donaturRow;
-      printf("     -> TCS terbesar berada pada baris FLC\n");
-    } else if (CSDon < CSRec) { //prioritas receiver satisfied
-      priority = * receiverRow;
-      printf("     -> TCS terbesar berada pada baris SLC\n");
-    } else if ( * donaturRow < * receiverRow) {//satisfied index terkecil
-      priority = * donaturRow;
-      printf("     -> TCS terbesar berada pada baris FLC\n");
-    } else {
-      priority = * receiverRow;
-      printf("     -> TCS terbesar berada pada baris SLC\n");
+    int priority;
+    if (TA_Supply_FLC > TA_Supply_SLC) { // STEP 6.a.i. satisfy SLC
+      printf("-> |TA - supply|  FLC  >  |TA - supply| SLC\n");
+      priority = * receiverRow; 
+      printf("   -> Satisfy baris SLC\n");
+    } else { // STEP 6.a.ii. satisfy baris dengan TCS terbesar
+      printf("-> |TA - supply| FLC  <=  |TA - supply| SLC\n");
+      printf("   -> Satisfy baris dengan TCS terbesar\n");
+      int CSDon = CS[ * donaturRow];
+      int CSRec = CS[ * receiverRow];
+      if (CSDon > CSRec) { //prioritas donatur satisfied
+        priority = * donaturRow;
+        printf("     -> TCS terbesar berada pada baris FLC\n");
+      } else if (CSDon < CSRec) { //prioritas receiver satisfied
+        priority = * receiverRow;
+        printf("     -> TCS terbesar berada pada baris SLC\n");
+      } else if ( * donaturRow < * receiverRow) {//satisfied index terkecil
+        priority = * donaturRow;
+        printf("     -> TCS terbesar berada pada baris FLC\n");
+      } else {
+        priority = * receiverRow;
+        printf("     -> TCS terbesar berada pada baris SLC\n");
+      }
     }
   }
-
   int maxDon = abs(s[priority] - sumRow[priority]);
   int donCapability = supply[ * donaturRow][ * donationCol];
   if (donCapability < maxDon) maxDon = donCapability;
